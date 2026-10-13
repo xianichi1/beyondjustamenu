@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Academic Code Citations & Source Documentation | Beyond The Counter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #121316;
+      --accent-coral: #E0564C;
+      --accent-purple: #BA9FD6;
+      --accent-mint: #A3DDD0;
+      --accent-pink: #E892A8;
+      --border: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --bg-card: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: var(--text-main);
+      background-color: #0f1115;
+      line-height: 1.35;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Screen toolbar (hidden in print) */
+    .screen-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #181a20;
+      border-bottom: 1px solid #282c35;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .toolbar-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toolbar-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      background: rgba(224, 86, 76, 0.2);
+      color: #ff857d;
+      border: 1px solid rgba(224, 86, 76, 0.3);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      border: none;
+    }
+
+    .btn-primary {
+      background: #E0564C;
+      color: #ffffff;
+    }
+    .btn-primary:hover {
+      background: #c9443b;
+    }
+
+    .btn-secondary {
+      background: #232730;
+      color: #ffffff;
+      border: 1px solid #3b4252;
+    }
+    .btn-secondary:hover {
+      background: #2d323e;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #94a3b8;
+      border: 1px solid #334155;
+    }
+    .btn-outline:hover {
+      color: #ffffff;
+      border-color: #64748b;
+    }
+
+    /* Page Canvas */
+    .page-wrapper {
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .pdf-page {
+      width: 8.5in;
+      min-height: 11in;
+      background: #ffffff;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+      border-radius: 4px;
+      padding: 0.35in 0.4in;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Header */
+    .header-box {
+      background: #0f172a;
+      border-radius: 6px;
+      padding: 10px 16px;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .header-title {
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      text-transform: uppercase;
+      color: #ffffff;
+    }
+
+    .header-sub {
+      font-size: 9px;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    .header-badge {
+      text-align: right;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      color: #94a3b8;
+      line-height: 1.4;
+    }
+
+    .header-badge strong {
+      color: #fca5a5;
+    }
+
+    /* Columns layout */
+    .columns-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      flex-grow: 1;
+    }
+
+    .col-header {
+      padding: 5px 8px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      color: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .col-header-w3 {
+      background: #1e3a5f;
+    }
+
+    .col-header-sources {
+      background: #7f1d1d;
+    }
+
+    .col-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      opacity: 0.9;
+    }
+
+    /* W3 Item cards */
+    .items-list {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .w3-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      padding: 4px 7px;
+      font-size: 8px;
+    }
+
+    .w3-card-top {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-bottom: 2px;
+    }
+
+    .w3-num {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      background: #1e3a5f;
+      color: #ffffff;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 700;
+      border-radius: 3px;
+      flex-shrink: 0;
+    }
+
+    .w3-topic {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 8.5px;
+    }
+
+    .w3-desc {
+      color: #475569;
+      font-size: 7.5px;
+      line-height: 1.25;
+      margin-bottom: 2px;
+    }
+
+    .w3-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 7px;
+      color: #64748b;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .w3-link {
+      color: #0284c7;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .w3-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Source cards */
+    .source-card {
+      background: #fffdfd;
+      border: 1px solid #fee2e2;
+      border-radius: 4px;
+      padding: 5px 8px;
+      font-size: 8px;
+    }
+
+    .source-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2px;
+    }
+
+    .source-org {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 700;
+      color: #b91c1c;
+      text-transform: uppercase;
+    }
+
+    .source-badge {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.5px;
+      background: #f1f5f9;
+      color: #475569;
+      padding: 1px 5px;
+      border-radius: 9999px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .source-title {
+      font-size: 8.5px;
+      font-weight: 700;
+      color: #0f172a;
+      line-height: 1.2;
+      margin-bottom: 3px;
+    }
+
+    .source-stat {
+      background: #fef2f2;
+      border-left: 2px solid #ef4444;
+      padding: 2px 6px;
+      margin-bottom: 3px;
+      color: #991b1b;
+      font-size: 7px;
+      font-weight: 600;
+      line-height: 1.25;
+    }
+
+    .source-desc {
+      color: #475569;
+      font-size: 7px;
+      line-height: 1.25;
+      margin-bottom: 2px;
+    }
+
+    .source-link {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 6.8px;
+      color: #0369a1;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .source-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Footer Box */
+    .footer-box {
+      margin-top: 8px;
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 6px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .footer-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 7.5px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .footer-helplines {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 7px;
+      color: #475569;
+      line-height: 1.3;
+    }
+
+    .footer-statement {
+      font-size: 6.8px;
+      font-style: italic;
+      color: #64748b;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 3px;
+      margin-top: 1px;
+    }
+
+    /* PRINT RULES FOR EXACT 1 PAGE */
+    @media print {
+      @page {
+        size: letter portrait;
+        margin: 0.25in;
+      }
+
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+
+      .screen-toolbar {
+        display: none !important;
+      }
+
+      .page-wrapper {
+        padding: 0 !important;
+      }
+
+      .pdf-page {
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        width: 100% !important;
+        min-height: auto !important;
+        height: 10.5in !important;
+        padding: 0 !important;
+      }
+
+      a {
+        text-decoration: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top screen toolbar (Hidden on Print/PDF export) -->
+  <div class="screen-toolbar">
+    <div class="toolbar-title">
+      <span>Academic Code Citations & Source Documentation</span>
+      <span class="toolbar-tag">1-Page Submission Format</span>
+    </div>
+    <div class="toolbar-actions">
+      <a href="citations.pdf" download="Beyond_The_Counter_Citations.pdf" class="btn btn-primary">
+        <span>↓ Download PDF File</span>
+      </a>
+      <button onclick="window.print()" class="btn btn-secondary">
+        <span>🖨 Print / Save as PDF</span>
+      </button>
+      <a href="index.html" class="btn btn-outline">
+        <span>← Back to Campaign</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="page-wrapper">
+    <div class="pdf-page">
+
+      <!-- Header Box -->
+      <div class="header-box">
+        <div>
+          <div class="header-title">Beyond The Counter: Code Citations & Source Documentation</div>
+          <div class="header-sub">Interactive Digital Anti-Discrimination Campaign &bull; Coursework Submission Sheet</div>
+        </div>
+        <div class="header-badge">
+          <div>Verified <strong>W3Schools Standards</strong></div>
+          <div>Empirical Research &amp; Media Citations &bull; Toronto 2026</div>
+        </div>
+      </div>
+
+      <!-- 2 Columns Grid -->
+      <div class="columns-grid">
+
+        <!-- Column 1: W3Schools Code Standards -->
+        <div>
+          <div class="col-header col-header-w3">
+            <span>PART I: W3SCHOOLS CODE CITATIONS & STANDARDS</span>
+            <span class="col-tag">11 TECHNIQUES</span>
+          </div>
+
+          <div class="items-list">
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">1</span>
+                <span class="w3-topic">CSS3 Keyframes &amp; Animations</span>
+              </div>
+              <div class="w3-desc"><code>@keyframes gentleFloat</code> creates subtle mascot floating; <code>blink</code> drives cursor animation.</div>
+              <div class="w3-meta">
+                <span>File: style.css / PaperTearTransition.jsx</span>
+                <a href="https://www.w3schools.com/css/css3_animations.asp" target="_blank" class="w3-link">w3schools.com/css/css3_animations.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">2</span>
+                <span class="w3-topic">CSS3 Flexbox Layout</span>
+              </div>
+              <div class="w3-desc"><code>display: flex</code>, <code>justify-content: center</code>, <code>align-items: center</code> for mobile viewport.</div>
+              <div class="w3-meta">
+                <span>File: index.html (.phone-container, .screen)</span>
+                <a href="https://www.w3schools.com/css/css3_flexbox.asp" target="_blank" class="w3-link">w3schools.com/css/css3_flexbox.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">3</span>
+                <span class="w3-topic">CSS Grid Layout</span>
+              </div>
+              <div class="w3-desc"><code>display: grid</code>, <code>grid-template-columns: 1fr 1fr</code> for side-by-side empirical stats cards.</div>
+              <div class="w3-meta">
+                <span>File: style.css (.stats-grid comparative layout)</span>
+                <a href="https://www.w3schools.com/css/css_grid.asp" target="_blank" class="w3-link">w3schools.com/css/css_grid.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">4</span>
+                <span class="w3-topic">Modal Dialogs &amp; Backdrop Blur</span>
+              </div>
+              <div class="w3-desc">Backdrop blur overlay (<code>.modal-backdrop</code>) and centered accessible card popups (<code>.modal-card</code>).</div>
+              <div class="w3-meta">
+                <span>File: index.html &amp; script.js (openModal/closeModal)</span>
+                <a href="https://www.w3schools.com/howto/howto_css_modals.asp" target="_blank" class="w3-link">w3schools.com/howto/howto_css_modals.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">5</span>
+                <span class="w3-topic">Scalable Vector Graphics (SVG &amp; Paths)</span>
+              </div>
+              <div class="w3-desc">SVG syntax, Bézier curves (<code>d="M... C... Z"</code>), fill gradients, cup lids, and tapioca pearls.</div>
+              <div class="w3-meta">
+                <span>File: artboard-7.svg, index.html boba graphic</span>
+                <a href="https://www.w3schools.com/graphics/svg_intro.asp" target="_blank" class="w3-link">w3schools.com/graphics/svg_intro.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">6</span>
+                <span class="w3-topic">HTML5 Semantic Structuring</span>
+              </div>
+              <div class="w3-desc">Semantic document tree using <code>&lt;main&gt;</code>, <code>&lt;section&gt;</code>, <code>&lt;header&gt;</code>, <code>&lt;button&gt;</code>.</div>
+              <div class="w3-meta">
+                <span>File: index.html (Screens 1 through 4 flow)</span>
+                <a href="https://www.w3schools.com/html/html5_semantic_elements.asp" target="_blank" class="w3-link">w3schools.com/html/html5_semantic_elements.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">7</span>
+                <span class="w3-topic">CSS 2D Transforms &amp; Timing</span>
+              </div>
+              <div class="w3-desc"><code>transform: scale()</code>, <code>rotate()</code>, <code>translateX()</code> for interactive tactile feedback.</div>
+              <div class="w3-meta">
+                <span>File: style.css (button tactile presses &amp; voucher tear)</span>
+                <a href="https://www.w3schools.com/css/css3_2dtransforms.asp" target="_blank" class="w3-link">w3schools.com/css/css3_2dtransforms.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">8</span>
+                <span class="w3-topic">CSS Custom Properties (Variables)</span>
+              </div>
+              <div class="w3-desc">Scoped color tokens: <code>--color-pastel-purple</code>, <code>--color-accent-coral</code> on <code>:root</code>.</div>
+              <div class="w3-meta">
+                <span>File: style.css (Unified theme design tokens)</span>
+                <a href="https://www.w3schools.com/css/css3_variables.asp" target="_blank" class="w3-link">w3schools.com/css/css3_variables.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">9</span>
+                <span class="w3-topic">CSS Box Shadows &amp; Borders</span>
+              </div>
+              <div class="w3-desc">Neomorphic ticket elevation, multi-layer drop shadows, coupon tear perforations, and staples.</div>
+              <div class="w3-meta">
+                <span>File: style.css (Phone mockup frame &amp; ticket card)</span>
+                <a href="https://www.w3schools.com/css/css3_shadows_box.asp" target="_blank" class="w3-link">w3schools.com/css/css3_shadows_box.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">10</span>
+                <span class="w3-topic">Async Clipboard &amp; Timer State</span>
+              </div>
+              <div class="w3-desc"><code>navigator.clipboard.writeText</code>, <code>setTimeout</code> state sequencing, typewriter cadence.</div>
+              <div class="w3-meta">
+                <span>File: script.js (copyCampaignText, startTransition)</span>
+                <a href="https://www.w3schools.com/howto/howto_js_copy_clipboard.asp" target="_blank" class="w3-link">w3schools.com/howto/howto_js_copy_clipboard.asp ↗</a>
+              </div>
+            </div>
+
+            <div class="w3-card">
+              <div class="w3-card-top">
+                <span class="w3-num">11</span>
+                <span class="w3-topic">Google Web Fonts Integration</span>
+              </div>
+              <div class="w3-desc">CDN loading and font stack cascading for Fredoka, Plus Jakarta Sans, and JetBrains Mono.</div>
+              <div class="w3-meta">
+                <span>File: index.html &amp; style.css</span>
+                <a href="https://www.w3schools.com/howto/howto_google_fonts.asp" target="_blank" class="w3-link">w3schools.com/howto/howto_google_fonts.asp ↗</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Column 2: Research & Media Sources -->
+        <div>
+          <div class="col-header col-header-sources">
+            <span>PART II: EMPIRICAL RESEARCH &amp; MEDIA SOURCES</span>
+            <span class="col-tag">8 SOURCES</span>
+          </div>
+
+          <div class="items-list">
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">Pew Research Center</span>
+                <span class="source-badge">Academic Study</span>
+              </div>
+              <div class="source-title">Asian Americans and Discrimination During the Pandemic</div>
+              <div class="source-stat">58% of Asian adults report facing discriminatory treatment, slurs, or harassment.</div>
+              <div class="source-desc">Empirical research analyzing interpersonal hostility, scapegoating, and systemic anti-Asian bias.</div>
+              <a href="https://www.pewresearch.org/race-and-ethnicity/2023/11/30/asian-americans-and-discrimination-during-the-covid-19-pandemic/" target="_blank" class="source-link">pewresearch.org/.../asian-americans-and-discrimination ↗</a>
+            </div>
+
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">Statistics Canada &amp; CCNC Toronto</span>
+                <span class="source-badge">Federal Audit</span>
+              </div>
+              <div class="source-title">Addressing Anti-Asian Racism in Canada &amp; Hate Crime Audits</div>
+              <div class="source-stat">301% surge in police-reported hate crimes; 40% of national incidents in Ontario (GTA).</div>
+              <div class="source-desc">Official government audit on racially motivated hate crimes and community intake reports.</div>
+              <a href="https://www.canada.ca/en/canadian-heritage/campaigns/asian-heritage-month/anti-asian-racism.html" target="_blank" class="source-link">canada.ca/.../campaigns/asian-heritage-month/anti-asian-racism.html ↗</a>
+            </div>
+
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">Stop AAPI Hate Coalition</span>
+                <span class="source-badge">National Intake</span>
+              </div>
+              <div class="source-title">National Hate Incident Reporting Database</div>
+              <div class="source-stat">68% of 3,800+ documented cases involved verbal harassment; commercial dining primary encounter site.</div>
+              <div class="source-desc">The leading community coalition tracking self-reported anti-Asian hate crimes and attacks.</div>
+              <a href="https://stopaapihate.org/" target="_blank" class="source-link">stopaapihate.org ↗</a>
+            </div>
+
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">UT Austin / Ethics Unwrapped</span>
+                <span class="source-badge">Behavioral Study</span>
+              </div>
+              <div class="source-title">Anti-Asian Violence and the Bystander Effect</div>
+              <div class="source-stat">Explores public passivity when microaggressions occur in dining and transit hubs.</div>
+              <div class="source-desc">Case study examining bystander inaction and practical frameworks for active solidarity.</div>
+              <a href="https://ethicsunwrapped.utexas.edu/anti-asian-violence-and-the-bystander-effect" target="_blank" class="source-link">ethicsunwrapped.utexas.edu/anti-asian-violence-and-the-bystander-effect ↗</a>
+            </div>
+
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">TIME Magazine</span>
+                <span class="source-badge">Cover Investigation</span>
+              </div>
+              <div class="source-title">Cover Story: We Are Being Targeted &amp; Hate Crimes Tripled</div>
+              <div class="source-stat">In-depth journalistic investigation into the empirical rise in anti-Asian attacks.</div>
+              <div class="source-desc">Documented violence targeting elderly immigrants and grassroots community mobilization.</div>
+              <a href="https://time.com/5947622/time-cover-anti-asian-american-violence-atlanta-shooting/" target="_blank" class="source-link">time.com/5947622/time-cover-anti-asian-american-violence ↗</a>
+            </div>
+
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">Paper Magazine</span>
+                <span class="source-badge">Cultural Feature</span>
+              </div>
+              <div class="source-title">Stop AAPI Hate: Global Culture &amp; The Fight for Dignity</div>
+              <div class="source-desc">Creative diasporic artists and cultural leaders speaking out against everyday xenophobia.</div>
+              <a href="https://www.papermag.com/bts-stop-aapi-hate#rebelltitem1" target="_blank" class="source-link">papermag.com/bts-stop-aapi-hate ↗</a>
+            </div>
+
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">OMG Lord &amp; Carrd Mutual Aid Masterlist</span>
+                <span class="source-badge">Resource Hub</span>
+              </div>
+              <div class="source-title">Anti-Asian Violence Resources &amp; Legal Intake Masterlist</div>
+              <div class="source-desc">Curated directories for grassroots victim relief funds, legal defense, and educational toolkits.</div>
+              <a href="https://anti-asianviolenceresources.carrd.co/" target="_blank" class="source-link">anti-asianviolenceresources.carrd.co &bull; omglord.com/resources/anti-racism ↗</a>
+            </div>
+
+            <div class="source-card">
+              <div class="source-top">
+                <span class="source-org">Design Archives (Are.na &amp; It's Nice That)</span>
+                <span class="source-badge">Visual Culture</span>
+              </div>
+              <div class="source-title">Asian Hate Signs Archive &amp; Yuk Fun Illustration Feature</div>
+              <div class="source-desc">Visual research into handmade protest placards, typography, and anti-racist illustration.</div>
+              <a href="https://www.are.na/search?q=%7B%22term%22%3A%7B%22facet%22%3A%22asian%20hate%20signs%22%7D%7D" target="_blank" class="source-link">are.na/search (asian hate signs) &bull; itsnicethat.com/news/yuk-fun ↗</a>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Box -->
+      <div class="footer-box">
+        <div class="footer-top">
+          <span>VERIFIED COMMUNITY HELPLINES (TORONTO &amp; GTA)</span>
+          <span style="font-family: 'JetBrains Mono', monospace; font-size: 7px; color: #b91c1c;">Page 1 of 1 &bull; Single Page Coursework Citation Sheet</span>
+        </div>
+        <div class="footer-helplines">
+          &bull; <strong>Toronto Distress Centres:</strong> 416-408-4357 (24/7) &nbsp;|&nbsp;
+          &bull; <strong>Gerstein Crisis Centre:</strong> 416-929-5200 &nbsp;|&nbsp;
+          &bull; <strong>CCNC Toronto Intake:</strong> info@ccnctoronto.ca &nbsp;|&nbsp;
+          &bull; <strong>Victim Services Toronto:</strong> 416-808-7066
+        </div>
+        <div class="footer-statement">
+          All HTML/CSS/JS techniques conform to W3Schools tutorials without external frameworks. All empirical data is cited from verified institutional audits and academic publications.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

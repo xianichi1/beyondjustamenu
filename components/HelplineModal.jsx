@@ -36,17 +36,14 @@ export function HelplineModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
       <div className="relative w-full max-w-md bg-[#181818] border border-[#2D2D2D] rounded-3xl p-5 shadow-2xl max-h-[85vh] overflow-y-auto text-left text-neutral-200">
-        <div className="flex items-center justify-between border-b border-[#262626] pb-3 mb-4">
-          <div className="flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4 text-[#E0564C]" />
-            <h3 className="text-sm font-bold text-white tracking-tight">
-              Community Helplines & Emergency Support
-            </h3>
-          </div>
+        <div className="relative flex items-center justify-center border-b border-[#262626] pb-3 mb-4">
+          <h3 className="text-sm font-bold text-white tracking-tight text-center">
+            Community Helplines & Emergency Support
+          </h3>
           <button
             onClick={onClose}
             aria-label="Close dialog"
-            className="p-1 rounded-full hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+            className="absolute right-0 p-1 rounded-full hover:bg-neutral-800 text-neutral-400 hover:text-white transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>

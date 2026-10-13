@@ -62,6 +62,35 @@ export function SourceCitationModal({ isOpen, onClose }) {
           </button>
         </div>
 
+        <div className="p-3.5 rounded-2xl bg-[#20242D] border border-[#333A48] mb-4 space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-bold text-white">Coursework Submission PDF</span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-[#A3DDD0]/20 text-[#A3DDD0] border border-[#A3DDD0]/30">
+              1 Proper Page
+            </span>
+          </div>
+          <p className="text-[11px] text-neutral-300 leading-relaxed">
+            All 11 W3Schools code techniques, empirical studies, and source links formatted on a single printable page.
+          </p>
+          <div className="flex gap-2 pt-1">
+            <a
+              href="/citations.pdf"
+              download="Beyond_The_Counter_Citations.pdf"
+              className="flex-1 text-center py-2 px-3 rounded-xl bg-[#E0564C] hover:bg-[#c9443b] text-white font-bold text-xs transition-colors"
+            >
+              Download PDF File
+            </a>
+            <a
+              href="/citations.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 text-center py-2 px-3 rounded-xl bg-[#2A303C] hover:bg-[#343c4a] border border-neutral-600 text-white font-bold text-xs transition-colors"
+            >
+              Print / Save Sheet ↗
+            </a>
+          </div>
+        </div>
+
         <p className="text-xs text-neutral-400 mb-4 leading-relaxed">
           Data referenced across this project comes from public studies and community reporting initiatives:
         </p>
