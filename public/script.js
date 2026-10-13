@@ -55,69 +55,6 @@ function showScreen(stepNum) {
   if (active) active.classList.add('active');
 }
 
-let audioCtx = null;
-function getAudioContext() {
-  if (typeof window === 'undefined') return null;
-  if (!audioCtx) {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (AudioContextClass) audioCtx = new AudioContextClass();
-  }
-  if (audioCtx && audioCtx.state === 'suspended') {
-    audioCtx.resume().catch(() => {});
-  }
-  return audioCtx;
-}
-
-function playPaperRip() {
-  try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    const bufferSize = Math.floor(ctx.sampleRate * 0.45);
-    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-    const data = buffer.getChannelData(0);
-    let lastOut = 0.0;
-    for (let i = 0; i < bufferSize; i++) {
-      const white = Math.random() * 2 - 1;
-      data[i] = (lastOut + 0.04 * white) / 1.04;
-      lastOut = data[i];
-      if (Math.random() < 0.03) {
-        data[i] += (Math.random() * 2 - 1) * 0.3;
-      }
-    }
-    const noise = ctx.createBufferSource();
-    noise.buffer = buffer;
-    const filter = ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(800, ctx.currentTime);
-    filter.frequency.exponentialRampToValueAtTime(350, ctx.currentTime + 0.4);
-    const gain = ctx.createGain();
-    gain.gain.setValueAtTime(0.35, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.4);
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(ctx.destination);
-    noise.start(ctx.currentTime);
-  } catch (e) {}
-}
-
-function playDarkImpact() {
-  try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(120, ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(32, ctx.currentTime + 0.4);
-    gain.gain.setValueAtTime(0.3, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.42);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + 0.45);
-  } catch (e) {}
-}
-
 function startTransition() {
   showScreen(2);
   const overlay = document.getElementById('tear-overlay');
@@ -136,8 +73,7 @@ function startTransition() {
 
   setTimeout(() => {
     if (overlay) overlay.className = 'tear-overlay tearing';
-    playPaperRip();
-  }, 350);
+  }, 220);
 
   setTimeout(() => {
     if (overlay) overlay.className = 'tear-overlay torn';
@@ -151,18 +87,17 @@ function startTransition() {
       } else {
         clearInterval(typewriterInterval);
       }
-    }, 70);
-  }, 850);
+    }, 45);
+  }, 600);
 
   transitionTimer = setTimeout(() => {
     finishTransition();
-  }, 3800);
+  }, 2200);
 }
 
 function finishTransition() {
   if (typewriterInterval) clearInterval(typewriterInterval);
   if (transitionTimer) clearTimeout(transitionTimer);
-  playDarkImpact();
   showScreen(3);
   renderStats();
 }

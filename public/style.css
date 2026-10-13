@@ -53,8 +53,8 @@ body {
 
 @media (min-width: 640px) {
   .phone-container {
-    min-height: 760px;
-    max-height: 860px;
+    height: 820px;
+    max-height: min(860px, calc(100vh - 40px));
     border-radius: 36px;
     border: 1px solid rgba(43, 43, 43, 0.8);
   }
@@ -74,7 +74,8 @@ body {
 
 @media (min-width: 640px) {
   .screen {
-    min-height: 760px;
+    min-height: 100%;
+    height: 100%;
   }
 }
 
@@ -142,8 +143,10 @@ body {
 }
 
 .boba-illustration-wrap {
-  width: 176px;
-  height: 224px;
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+  aspect-ratio: 2592 / 1728;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -158,7 +161,7 @@ body {
 .boba-svg {
   width: 100%;
   height: 100%;
-  overflow: visible;
+  display: block;
 }
 
 .voucher-card-title {
@@ -509,19 +512,20 @@ body {
 
 .screen-provocation {
   background-color: var(--color-dark-bg);
+  justify-content: space-between;
 }
 
-.mascot-frame {
-  padding: 16px;
-  border-radius: 24px;
-  background-color: var(--color-card-dark);
-  border: 1px solid var(--color-card-border);
+.provocation-content {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: center;
-  width: 140px;
-  height: 180px;
-  margin: 0 auto;
+  gap: 18px;
+  width: 100%;
+  margin: auto 0;
+}
+
+.provocation-header {
+  text-align: center;
 }
 
 .provocation-title-white {
@@ -530,6 +534,7 @@ body {
   color: #ffffff;
   letter-spacing: -0.5px;
   line-height: 1.2;
+  text-align: center;
 }
 
 .provocation-title-red {
@@ -538,6 +543,7 @@ body {
   color: var(--color-accent-coral);
   letter-spacing: -0.5px;
   line-height: 1.2;
+  text-align: center;
 }
 
 @media (min-width: 640px) {
@@ -551,8 +557,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin: 6px 0;
+  gap: 8px;
+  margin: 0;
 }
 
 .scope-btn {
@@ -584,7 +590,12 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
-  margin: 8px 0;
+  margin: 0;
+}
+
+.citations-wrap {
+  text-align: center;
+  margin-top: 2px;
 }
 
 .research-card {
@@ -689,6 +700,8 @@ body {
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex-shrink: 0;
+  margin-top: 16px;
 }
 
 .proceed-button:hover {

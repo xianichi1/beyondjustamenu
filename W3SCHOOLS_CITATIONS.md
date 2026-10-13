@@ -82,8 +82,18 @@ This document maps all web development techniques, CSS properties, HTML structur
 
 ---
 
-## 10. JavaScript Web Audio Synthesis
-- **Topic:** `AudioContext`, `OscillatorNode`, `createBuffer`, and `GainNode`
-- **W3Schools Reference:** [JavaScript Web APIs (w3schools.com)](https://www.w3schools.com/js/js_api_intro.asp)
+## 10. JavaScript Async Clipboard & Timer State
+- **Topic:** `navigator.clipboard.writeText`, `setTimeout`, and `setInterval`
+- **W3Schools Reference:** [JavaScript Timing Events (w3schools.com)](https://www.w3schools.com/js/js_timing.asp) & [How To Copy Text to Clipboard (w3schools.com)](https://www.w3schools.com/howto/howto_js_copy_clipboard.asp)
 - **Usage in Code:**
-  - `script.js` & `lib/audio.js`: Synthesizes real-time procedural paper tearing noise (`playPaperRip`) and low-frequency bass impact (`playDarkImpact`) directly in browser memory without external MP3 audio file dependencies.
+  - `script.js`: Coordinates the narrative paper tear transitions (`startTransition`), typewriter text cadence, and one-click campaign link copying (`copyCampaignText`) with dynamic feedback.
+
+---
+
+## 11. Web Fonts & Google Fonts Integration
+- **Topic:** External Web Fonts (`@import`, `<link rel="stylesheet">`, and `font-family` fallbacks)
+- **W3Schools Reference:** [How To Use Google Fonts (w3schools.com)](https://www.w3schools.com/howto/howto_google_fonts.asp) & [CSS Web Fonts (w3schools.com)](https://www.w3schools.com/css/css3_fonts.asp)
+- **Usage in Code:**
+  - `index.html`: Loaded via Google Fonts CDN in the `<head>` tag (`Fredoka`, `Plus Jakarta Sans`, and `JetBrains Mono`).
+  - `style.css`: Applied across headers, body copy, and statistics with standard fallback font stacks (`sans-serif`, `monospace`).
+

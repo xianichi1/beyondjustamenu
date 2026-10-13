@@ -301,22 +301,6 @@ export function ActionDetailModal({ category, onClose }) {
                   Submit personal experiences anonymously to contribute to this graphic design thesis research archive.
                 </p>
 
-                <div>
-                  <label className="block text-[11px] font-medium text-neutral-300 mb-1">
-                    Nature of Experience
-                  </label>
-                  <select
-                    value={incidentType}
-                    onChange={(e) => setIncidentType(e.target.value)}
-                    className="w-full text-xs bg-[#141414] border border-[#333333] rounded-xl px-3 py-2 text-white focus:outline-hidden focus:border-[#BA9FD6]"
-                  >
-                    <option value="verbal">Verbal Harassment / Racial Slurs</option>
-                    <option value="microaggression">Everyday Microaggression (&ldquo;My culture isn&apos;t your costume&rdquo;)</option>
-                    <option value="hospitality">Hospitality / Dining / Transit Incident</option>
-                    <option value="refusal">Service Discrimination or Unsafe Encounter</option>
-                    <option value="other">Online Xenophobic Stereotyping</option>
-                  </select>
-                </div>
 
                 <div>
                   <label className="block text-[11px] font-medium text-neutral-300 mb-1">
@@ -427,7 +411,7 @@ export function ActionDetailModal({ category, onClose }) {
                 &ldquo;Love Us like you Love our Food & Culture!&rdquo;
               </p>
               <p className="text-xs text-neutral-300 max-w-xs mx-auto">
-                Rather than posters that peel off and turn into forgotten staples, turn public consumption into lasting solidarity.
+                Love our people like you love their food.
               </p>
             </div>
 
