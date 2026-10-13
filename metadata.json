@@ -1,0 +1,6 @@
+{
+  "name": "Secret Spots Toronto",
+  "description": "An interactive mobile-first graphic design thesis project exploring cultural commodification and anti-Asian discrimination through a 4-step narrative transition.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
