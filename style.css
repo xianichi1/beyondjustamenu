@@ -787,9 +787,19 @@ body {
   text-decoration: underline;
   text-underline-offset: 4px;
   cursor: pointer;
-  margin-top: 24px;
+  padding-top: 0px;
+  padding-left: 0px;
+  min-height: 46px;
+  margin-left: 0px;
+  margin-top: 26px;
   margin-bottom: 16px;
   display: block;
+  line-height: 1.5;
+}
+
+.helplines-support-text {
+  display: block;
+  margin-top: 7px;
 }
 
 .helplines-link-btn:hover {
